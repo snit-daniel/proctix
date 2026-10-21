@@ -1,0 +1,33 @@
+{
+  "model": "AuraFace-v1-ResNet100",
+  "detector": "YuNet-2023mar",
+  "scope": "Sanity checks on public examples, NOT an accuracy benchmark",
+  "results": [
+    {
+      "case": "identical sample",
+      "status": "compared",
+      "score": 1.0,
+      "seconds": 0.333
+    },
+    {
+      "case": "different people",
+      "status": "compared",
+      "score": 0.13671,
+      "seconds": 0.209
+    },
+    {
+      "case": "two public example portraits in one frame",
+      "face_count": 2
+    },
+    {
+      "case": "same person, different public photos; recognition core only",
+      "score": 0.63275,
+      "note": "First public photo fails production minimum-face-size guard; this bypass is diagnostic only."
+    },
+    {
+      "case": "different public people; recognition core only",
+      "score": 0.09701
+    }
+  ],
+  "source": "https://github.com/mk-minchul/AdaFace/tree/master/face_alignment/test_images"
+}

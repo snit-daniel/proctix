@@ -1,0 +1,10 @@
+{$PROCTIX_DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 8MB
+    }
+    reverse_proxy web:8000 {
+        header_up Host {$PROCTIX_DOMAIN}
+    }
+    # No access log: pairing secrets stay in URL fragments and credentials are never logged.
+}

@@ -1,0 +1,16 @@
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+var/
+models/*.onnx
+*.db
+*.db-*
+.coverage
+node_modules/
+playwright-report/
+test-results/

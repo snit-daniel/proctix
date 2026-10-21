@@ -1,0 +1,54 @@
+name: Proctix validation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_USER: proctix
+          POSTGRES_PASSWORD: ci-only-database-password
+          POSTGRES_DB: proctix_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U proctix -d proctix_test"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng ffmpeg
+      - run: python -m pip install --require-hashes -r requirements-dev.lock
+      - run: python scripts/fetch_models.py
+      - run: ruff check proctix scripts tests
+      - run: pytest -q
+      - run: pytest -q
+        env:
+          PROCTIX_TEST_DATABASE_URL: postgresql+psycopg://proctix:ci-only-database-password@localhost:5432/proctix_test
+      - run: pip-audit -r requirements.lock --no-deps --disable-pip
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr tesseract-ocr-eng ffmpeg
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install --require-hashes -r requirements-dev.lock
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx prettier --check proctix/static e2e playwright.config.js package.json
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-traces
+          path: test-results/

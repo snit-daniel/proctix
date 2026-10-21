@@ -1,0 +1,1835 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <title>Proctix · Assessment workspace</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/workspace.css" />
+    <script src="/static/offline.js" defer></script>
+    <script src="/static/monitoring.js" defer></script>
+    <script src="/static/experience.js" defer></script>
+    <script src="/static/gaze.js" defer></script>
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body data-view="loading">
+    <dialog id="gaze-calibration" aria-label="Gaze calibration">
+      <p id="gaze-calibration-help" role="status"></p>
+      <button id="gaze-target" type="button">Look here</button
+      ><button id="cancel-gaze" class="secondary">Cancel calibration</button>
+    </dialog>
+    <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-grid" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </symbol>
+      <symbol id="icon-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6" />
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24">
+        <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
+        <path d="m8 12 3 3 5-6" />
+      </symbol>
+      <symbol id="icon-camera" viewBox="0 0 24 24">
+        <rect x="3" y="6" width="13" height="13" rx="3" />
+        <path d="m16 10 5-3v12l-5-3" />
+      </symbol>
+      <symbol id="icon-screen" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="14" rx="2" />
+        <path d="M8 21h8m-4-4v4" />
+      </symbol>
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" />
+        <path d="M14 3v6h6M8 14h8m-8 4h5" />
+      </symbol>
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24">
+        <path d="M4 12h16m-6-6 6 6-6 6" />
+      </symbol>
+      <symbol id="icon-gear" viewBox="0 0 24 24">
+        <path d="m9 3-1 3-3 1v4l2 1-1 3 3 3 3-1 2 2 3-2v-3l3-2-1-4-3-1-1-3Z" />
+        <circle cx="12" cy="11" r="3" />
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v6m0-10v1" />
+      </symbol>
+      <symbol id="icon-phone" viewBox="0 0 24 24">
+        <rect x="6" y="2" width="12" height="20" rx="3" />
+        <path d="M10 18h4" />
+      </symbol>
+      <symbol id="icon-lock" viewBox="0 0 24 24">
+        <rect x="4" y="10" width="16" height="11" rx="2" />
+        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+      </symbol>
+      <symbol id="icon-logout" viewBox="0 0 24 24">
+        <path d="M9 4H4v16h5m6-13 5 5-5 5m-6-5h11" />
+      </symbol>
+    </svg>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <a href="/" class="brand"
+        ><span class="brand-mark"
+          ><svg class="icon" aria-hidden="true">
+            <use href="#icon-shield"></use></svg></span
+        >Proctix<span class="brand-period">.</span></a
+      >
+      <div class="workspace-switch">
+        <span class="workspace-avatar">P</span>
+        <div>
+          <strong id="organization-name">Assessment workspace</strong
+          ><span id="organization-kind">Organization workspace</span>
+        </div>
+      </div>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="workspace-nav">
+        <button id="nav-assessments" class="nav-item active">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-grid"></use></svg
+          ><span>Assessments</span></button
+        ><button id="nav-history" class="nav-item">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-clock"></use></svg
+          ><span>Session history</span></button
+        ><button id="nav-manage" class="nav-item" hidden>
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-gear"></use></svg
+          ><span>Administration</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="support-note">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-info"></use>
+          </svg>
+          <div>
+            <strong>Need a hand?</strong>
+            <p>
+              Your assessment organizer can help with access or accommodations.
+            </p>
+          </div>
+        </div>
+        <button id="nav-account" class="nav-item">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-user"></use></svg
+          ><span>Account settings</span>
+        </button>
+        <p class="sidebar-version">PROCTIX WORKSPACE <span>V2</span></p>
+      </div>
+    </aside>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="mobile-brand">
+          <span class="brand-mark"
+            ><svg class="icon" aria-hidden="true">
+              <use href="#icon-shield"></use></svg></span
+          >Proctix
+        </div>
+        <div class="breadcrumb">
+          <span>Workspace</span><span class="breadcrumb-slash">/</span
+          ><strong id="page-location">Assessments</strong>
+        </div>
+        <div class="topbar-actions">
+          <span id="connection-status" class="connection-pill"
+            ><i></i>Connected</span
+          >
+          <div class="profile">
+            <span id="profile-avatar" class="profile-avatar">P</span>
+            <div id="identity"></div>
+          </div>
+          <button
+            id="logout"
+            class="icon-button"
+            aria-label="Sign out"
+            title="Sign out"
+            hidden
+          >
+            <svg class="icon" aria-hidden="true">
+              <use href="#icon-logout"></use>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <main id="main-content">
+        <div id="message" role="status" aria-live="polite"></div>
+        <section id="login-panel" hidden>
+          <div class="login-story">
+            <a href="/" class="brand"
+              ><span class="brand-mark"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#icon-shield"></use></svg></span
+              >Proctix<span class="brand-period">.</span></a
+            >
+            <div class="login-story-copy">
+              <span class="login-tag">THE ASSESSMENT WORKSPACE</span>
+              <h1>Ready for your<br />next chapter.</h1>
+              <p>
+                A focused space for exams, interviews, and the opportunities
+                ahead.
+              </p>
+              <div class="login-promises">
+                <span
+                  ><svg class="icon" aria-hidden="true">
+                    <use href="#icon-check"></use></svg
+                  >Clear, guided preparation</span
+                ><span
+                  ><svg class="icon" aria-hidden="true">
+                    <use href="#icon-check"></use></svg
+                  >Your work, saved as you go</span
+                ><span
+                  ><svg class="icon" aria-hidden="true">
+                    <use href="#icon-check"></use></svg
+                  >Human-reviewed assessments</span
+                >
+              </div>
+            </div>
+            <p class="login-story-footer">
+              Built for education. Ready for opportunity.
+            </p>
+            <div class="login-orbit" aria-hidden="true"></div>
+          </div>
+          <div class="login-form-side">
+            <div class="login-form-wrap">
+              <p class="eyebrow">WELCOME TO PROCTIX</p>
+              <h2>Sign in to your workspace</h2>
+              <p class="muted">
+                Use the account provided by your school or employer.
+              </p>
+              <form id="login-form">
+                <label
+                  >Organization code<input
+                    name="institution"
+                    required
+                    autocomplete="organization"
+                    pattern="[a-z0-9-]+"
+                    placeholder="e.g. your-school"
+                  /><span class="field-hint"
+                    >Your organizer will provide this code.</span
+                  ></label
+                ><label
+                  >Email<input
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="username"
+                    placeholder="you@organization.com" /></label
+                ><label
+                  >Password<input
+                    name="password"
+                    type="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="Enter your password"
+                /></label>
+                <details class="mfa-disclosure">
+                  <summary>I use an authenticator</summary>
+                  <label
+                    >Authenticator code, if enrolled<input
+                      name="otp"
+                      inputmode="numeric"
+                      autocomplete="one-time-code"
+                      maxlength="6"
+                      placeholder="6-digit code"
+                  /></label>
+                </details>
+                <button class="primary full-width">
+                  Sign in<svg class="icon" aria-hidden="true">
+                    <use href="#icon-arrow"></use>
+                  </svg>
+                </button>
+              </form>
+              <p class="login-help">
+                Having trouble signing in?<br /><strong
+                  >Contact your assessment organizer.</strong
+                >
+              </p>
+            </div>
+            <p class="login-privacy">
+              <svg class="icon" aria-hidden="true">
+                <use href="#icon-lock"></use></svg
+              >Your workspace is private to your organization.
+            </p>
+          </div>
+        </section>
+        <section id="dashboard" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow" id="dashboard-eyebrow">YOUR WORKSPACE</p>
+              <h1 id="dashboard-title">Your assessments</h1>
+              <p id="dashboard-description">
+                Prepare, take your next assessment, and keep track of your
+                progress.
+              </p>
+            </div>
+            <span id="today-label" class="date-label"></span>
+          </div>
+          <div class="metrics-row">
+            <div class="metric">
+              <span class="metric-icon lavender"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#icon-file"></use></svg
+              ></span>
+              <div>
+                <span id="metric-assessments" class="metric-value">0</span
+                ><span id="metric-assessment-label" class="metric-label"
+                  >Assigned assessments</span
+                >
+              </div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon blue"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#icon-clock"></use></svg
+              ></span>
+              <div>
+                <span id="metric-active" class="metric-value">0</span
+                ><span class="metric-label">In progress</span>
+              </div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon mint"
+                ><svg class="icon" aria-hidden="true">
+                  <use href="#icon-check"></use></svg
+              ></span>
+              <div>
+                <span id="metric-completed" class="metric-value">0</span
+                ><span class="metric-label">Completed sessions</span>
+              </div>
+            </div>
+          </div>
+          <div id="assessments-area">
+            <div class="section-heading">
+              <div>
+                <h2>Available assessments</h2>
+                <p id="assessment-list-description">
+                  Choose an assessment to view the requirements and begin setup.
+                </p>
+              </div>
+              <span id="assessment-count" class="count-label"></span>
+            </div>
+            <div id="exams" class="assessment-grid"></div>
+          </div>
+          <div id="session-history-area">
+            <div class="section-heading">
+              <div>
+                <h2 id="sessions-heading">Your attempts</h2>
+                <p>Your attempts and their latest status.</p>
+              </div>
+              <button id="refresh" class="secondary small">Refresh</button>
+            </div>
+            <div class="attempt-toolbar">
+              <label
+                >Find an attempt<input
+                  id="session-search"
+                  type="search"
+                  placeholder="Search by student or assessment"
+              /></label>
+              <label
+                >Status<select id="session-status-filter">
+                  <option value="all">All statuses</option>
+                  <option value="preflight">Setup in progress</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="submitted">Submitted</option>
+                  <option value="expired">Expired</option>
+                  <option value="cancelled">Cancelled</option>
+                  <option value="terminated">Ended by staff</option>
+                </select></label
+              >
+            </div>
+            <p id="attempt-results" class="muted" role="status"></p>
+            <div id="sessions" class="session-list"></div>
+          </div>
+        </section>
+        <section id="admin-tools" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">ORGANIZATION</p>
+              <h1>Administration</h1>
+              <p>
+                Manage accounts, assessment policies, and candidate assignments.
+              </p>
+            </div>
+          </div>
+          <details class="panel management-card">
+            <summary>Student enrollment numbers</summary>
+            <form id="enrollment-number-form">
+              <label
+                >Student<select id="enrollment-user" required></select></label
+              ><label
+                >Institution student number<input
+                  id="student-number"
+                  maxlength="80"
+                  pattern="[A-Za-z0-9._-]+"
+                  required /></label
+              ><button class="primary">Save student number</button>
+            </form>
+          </details>
+          <div class="management-grid">
+            <details class="panel management-card">
+              <summary>Create an account</summary>
+              <form id="user-form">
+                <label
+                  >Institution student number (optional)<input
+                    name="student_number"
+                    maxlength="80"
+                    pattern="[A-Za-z0-9._-]*"
+                /></label>
+                <label
+                  >Full name<input
+                    name="name"
+                    required
+                    maxlength="160" /></label
+                ><label
+                  >Email<input name="email" type="email" required
+                /></label>
+                <label
+                  >Initial password (14+ characters)<input
+                    name="password"
+                    type="password"
+                    required
+                    minlength="14"
+                    autocomplete="new-password"
+                /></label>
+                <label
+                  >Role<select name="role">
+                    <option value="student">Student</option>
+                    <option value="proctor">Proctor</option>
+                  </select></label
+                ><button>Create account</button>
+              </form>
+              <p class="form-hint">
+                Staff accounts require authenticator enrollment before
+                production sign-in.
+              </p>
+            </details>
+            <details class="panel management-card">
+              <summary>Create an assessment</summary>
+              <form id="exam-form">
+                <label>Name<input name="name" required maxlength="160" /></label
+                ><label
+                  >Description<textarea name="description"></textarea>
+                </label>
+                <label
+                  >Type<select name="kind">
+                    <option value="exam">Exam</option>
+                    <option value="interview">Interview</option>
+                  </select></label
+                >
+                <label
+                  >Duration in minutes<input
+                    name="duration_minutes"
+                    type="number"
+                    min="1"
+                    max="480"
+                    value="60"
+                    required
+                /></label>
+                <label
+                  >Questions (one prompt per line)<textarea
+                    name="prompts"
+                    required
+                    rows="5"
+                  ></textarea>
+                </label>
+                <label class="check"
+                  ><input name="require_seb" type="checkbox" checked />Require
+                  approved Safe Exam Browser</label
+                >
+                <label
+                  >Browser Exam Keys (one per line)<textarea
+                    name="seb_keys"
+                    placeholder="Copy from the finalized SEB configuration"
+                  ></textarea>
+                </label>
+                <label class="check"
+                  ><input
+                    name="require_camera"
+                    type="checkbox"
+                    checked
+                  />Require camera</label
+                >
+                <label class="check"
+                  ><input
+                    name="require_screen"
+                    type="checkbox"
+                    checked
+                  />Require entire display capture</label
+                >
+                <label class="check"
+                  ><input name="require_audio" type="checkbox" checked />Require
+                  microphone</label
+                >
+                <label class="check"
+                  ><input name="require_mobile" type="checkbox" />Require
+                  secondary mobile camera</label
+                >
+                <label
+                  >Identity review<select name="verification_mode">
+                    <option value="human">Human review</option>
+                    <option value="institution_account">
+                      Assigned institution account · identity evidence reviewed
+                      later
+                    </option>
+                    <option value="biometric_review">
+                      Local face comparison + human review
+                    </option>
+                  </select></label
+                >
+                <fieldset class="monitoring-settings">
+                  <legend>Monitoring and capture settings</legend>
+                  <label class="check"
+                    ><input
+                      name="restrict_context_menu"
+                      type="checkbox"
+                    />Restrict the context menu inside answers</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="restrict_print_save_shortcuts"
+                      type="checkbox"
+                    />Restrict print/save shortcuts inside answers (not OS
+                    lockdown)</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_face_comparison"
+                      type="checkbox"
+                    />Advisory ID/selfie comparison (separate from admission
+                    method)</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_face_detection"
+                      type="checkbox"
+                      checked
+                    />Face-count and image-quality checks</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_audio_monitoring"
+                      type="checkbox"
+                      checked
+                    />Sound-level observations</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_behavior_monitoring"
+                      type="checkbox"
+                      checked
+                    />Aggregate input summaries (no text)</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_monitor_detection"
+                      type="checkbox"
+                      checked
+                    />Browser-supported display inventory</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_screenshots"
+                      type="checkbox"
+                      checked
+                    />Display snapshots</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="enable_recording"
+                      type="checkbox"
+                      checked
+                    />Screen recording</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="adaptive_capture"
+                      type="checkbox"
+                      checked
+                    />Adapt capture quality to uploads</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="require_fullscreen"
+                      type="checkbox"
+                      checked
+                    />Fullscreen and recovery warnings</label
+                  >
+                  <label class="check"
+                    ><input
+                      name="restrict_copy_paste"
+                      type="checkbox"
+                    />Restrict copy/paste inside assessment answers</label
+                  >
+                  <label
+                    >Camera check interval (seconds)<input
+                      name="camera_interval_seconds"
+                      type="number"
+                      value="3"
+                      min="1"
+                      max="30"
+                      required
+                  /></label>
+                  <label
+                    >Display snapshot interval (seconds)<input
+                      name="screenshot_interval_seconds"
+                      type="number"
+                      value="5"
+                      min="5"
+                      max="60"
+                      required
+                  /></label>
+                  <label
+                    >Maximum recording frames per second<input
+                      name="recording_fps"
+                      type="number"
+                      value="5"
+                      min="1"
+                      max="15"
+                      required
+                  /></label>
+                  <label
+                    >Maximum recording bitrate (bits/sec)<input
+                      name="recording_bitrate"
+                      type="number"
+                      value="450000"
+                      min="100000"
+                      max="1500000"
+                      required
+                  /></label>
+                  <label
+                    >Fullscreen return limit (seconds)<input
+                      name="fullscreen_grace_seconds"
+                      type="number"
+                      value="5"
+                      min="5"
+                      max="5"
+                      readonly
+                      required
+                  /></label>
+                  <label
+                    >Identity requests (0 = unlimited)<input
+                      name="max_verification_attempts"
+                      type="number"
+                      value="5"
+                      min="0"
+                      max="10"
+                      required
+                  /></label>
+                  <label
+                    >Observation review threshold<input
+                      name="max_violations"
+                      type="number"
+                      value="5"
+                      min="1"
+                      max="100"
+                      required
+                  /></label>
+                </fieldset>
+                <label
+                  >Evidence retention days<input
+                    name="retention_days"
+                    type="number"
+                    value="30"
+                    min="1"
+                    max="365" /></label
+                ><button>Create assessment</button>
+              </form>
+            </details>
+            <details class="panel management-card">
+              <summary>Assign an assessment</summary>
+              <form id="assign-form">
+                <label
+                  >Assessment<select
+                    name="exam_id"
+                    id="assignment-exam"
+                    required
+                  ></select></label
+                ><label
+                  >Student<select
+                    name="user_id"
+                    id="assignment-user"
+                    required
+                  ></select
+                ></label>
+                <label
+                  >Allowed attempts<input
+                    name="max_attempts"
+                    type="number"
+                    value="1"
+                    min="1"
+                    max="10"
+                /></label>
+                <label
+                  >Extra minutes (accommodation)<input
+                    name="extra_minutes"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="480" /></label
+                ><button>Assign</button>
+              </form>
+            </details>
+          </div>
+        </section>
+        <section id="student-session" hidden>
+          <div
+            id="assessment-alert"
+            class="assessment-alert"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+          <div class="session-heading">
+            <div>
+              <p class="eyebrow" id="session-eyebrow">ASSESSMENT SETUP</p>
+              <h1 id="session-title">Let's get you ready.</h1>
+              <p id="assessment-context">
+                Complete the checks below before your assessment begins.
+              </p>
+              <span id="session-state" class="status-pill neutral"></span>
+            </div>
+            <div class="time-card">
+              <svg class="icon" aria-hidden="true">
+                <use href="#icon-clock"></use>
+              </svg>
+              <div>
+                <span id="timer-label">TIME ALLOWED</span
+                ><output id="timer" aria-label="Time remaining"
+                  >Not started</output
+                ><small id="timer-hint">Your timer hasn't started yet</small>
+              </div>
+            </div>
+          </div>
+          <section
+            id="assessment-observations"
+            class="panel attempt-observations"
+            aria-label="Current attempt observations"
+            hidden
+          >
+            <h2>Exam observations</h2>
+            <p id="confirmed-violation-count" role="status">
+              0 / 5 proctor-confirmed violations. Automatic observations do not
+              count toward submission.
+            </p>
+            <p>
+              Only observations recorded after this attempt begins appear here.
+              An observation is not a misconduct decision.
+            </p>
+            <p id="observation-count">No observations loaded</p>
+            <ul id="recent-observations"></ul>
+            <details
+              id="camera-warning-history"
+              class="camera-warning-history"
+              hidden
+            >
+              <summary>Camera warnings · never counted as violations</summary>
+              <p id="camera-warning-count"></p>
+              <ul id="recent-camera-warnings"></ul>
+            </details>
+            <p id="monitoring-sync" class="muted" role="status"></p>
+          </section>
+          <div
+            id="setup-summary"
+            class="setup-summary"
+            role="status"
+            aria-live="polite"
+          >
+            <h2>Next action</h2>
+            <p id="setup-summary-text"></p>
+            <button id="setup-next-action" class="primary">
+              Go to the next required check
+            </button>
+            <details id="remaining-checks">
+              <summary>See all remaining checks</summary>
+              <ul id="missing-items"></ul>
+            </details>
+            <details>
+              <summary>Assessment rules</summary>
+              <p>
+                Your latest server-saved answers will be submitted automatically
+                after five proctor-confirmed violations. Automated observations
+                alone do not end the exam.
+              </p>
+            </details>
+          </div>
+          <nav
+            id="preflight-steps"
+            class="stepper"
+            aria-label="Assessment setup steps"
+          >
+            <button type="button" data-step="1">
+              <span class="step-number">1</span
+              ><span
+                ><strong>Consent</strong><small>Review & agree</small></span
+              ></button
+            ><button type="button" data-step="5">
+              <span class="step-number">2</span
+              ><span
+                ><strong>Your details</strong
+                ><small>Enter student ID</small></span
+              ></button
+            ><button type="button" data-step="2">
+              <span class="step-number">3</span
+              ><span
+                ><strong>Device check</strong
+                ><small>Connect your devices</small></span
+              ></button
+            ><button type="button" data-step="3">
+              <span class="step-number">4</span
+              ><span
+                ><strong>Identity</strong><small>Confirm it's you</small></span
+              ></button
+            ><button type="button" data-step="4">
+              <span class="step-number">5</span
+              ><span
+                ><strong>Ready to begin</strong
+                ><small>Review & start</small></span
+              >
+            </button>
+          </nav>
+          <p id="time-warning" class="setup-summary" role="alert" hidden></p>
+          <section
+            id="fullscreen-recovery"
+            class="fullscreen-overlay"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="fullscreen-title"
+            aria-describedby="fullscreen-help"
+            tabindex="-1"
+            hidden
+          >
+            <div class="fullscreen-dialog">
+              <p class="eyebrow">FULLSCREEN REQUIRED</p>
+              <h2 id="fullscreen-title">Return to fullscreen</h2>
+              <output id="fullscreen-countdown" aria-label="Seconds remaining"
+                >5</output
+              >
+              <p id="fullscreen-help"></p>
+              <button id="recover-fullscreen" class="primary">
+                Return to fullscreen
+              </button>
+            </div>
+          </section>
+          <div class="session-workspace">
+            <div class="session-primary">
+              <div id="preflight">
+                <section id="setup-step-1" class="panel setup-card">
+                  <div class="card-heading">
+                    <span class="section-icon lavender"
+                      ><svg class="icon" aria-hidden="true">
+                        <use href="#icon-shield"></use></svg
+                    ></span>
+                    <div>
+                      <p class="eyebrow">Assessment notice</p>
+                      <h2>Before you begin</h2>
+                    </div>
+                  </div>
+                  <p class="card-description">
+                    Take a moment to understand how this assessment is
+                    supervised.
+                  </p>
+                  <div class="consent-info-grid">
+                    <article class="notice-box">
+                      <span class="eyebrow">01 · SUPERVISION</span>
+                      <h3>What is captured</h3>
+                      <p id="notice"></p>
+                    </article>
+                    <article class="notice-box">
+                      <span class="eyebrow">02 · YOUR DATA</span>
+                      <h3>Privacy &amp; retention</h3>
+                      <p id="retention-notice" class="retention"></p>
+                    </article>
+                  </div>
+                  <label class="check consent-option"
+                    ><input id="consent-check" type="checkbox" /><span
+                      >I have read the notice and agree to the required
+                      capture.<small
+                        >I can contact my organizer for accommodations or an
+                        alternative assessment.</small
+                      ></span
+                    ></label
+                  >
+                  <div class="card-actions">
+                    <button id="decline" class="text-button">
+                      Decline and close attempt</button
+                    ><button id="consent" class="primary">
+                      Accept & continue<svg class="icon" aria-hidden="true">
+                        <use href="#icon-arrow"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </section>
+                <section id="setup-step-2" class="panel setup-card" hidden>
+                  <div class="photo-step-header device-step-header">
+                    <div>
+                      <p class="eyebrow">YOUR DEVICE CHECK</p>
+                      <h2>Get connected. Get comfortable.</h2>
+                      <p class="card-description">
+                        Check your camera and display here. Exam monitoring
+                        starts only when you begin.
+                      </p>
+                    </div>
+                    <div class="photo-progress">
+                      <span id="device-ready-count">0 / 2</span
+                      ><small id="device-ready-label"
+                        >required connections</small
+                      >
+                    </div>
+                  </div>
+                  <div class="device-setup-grid">
+                    <article class="device-setup-card" id="camera-device-card">
+                      <div class="photo-card-heading">
+                        <span class="device-card-symbol"
+                          ><svg class="icon" aria-hidden="true">
+                            <use href="#icon-camera"></use></svg
+                        ></span>
+                        <div>
+                          <p class="eyebrow">01 · CAMERA &amp; SOUND</p>
+                          <h3>Camera &amp; microphone</h3>
+                        </div>
+                      </div>
+                      <span id="camera-status" class="status-pill neutral"
+                        >Not connected</span
+                      >
+                      <div
+                        id="camera-device-preview"
+                        class="device-card-preview"
+                      ></div>
+                      <p
+                        id="camera-requirement"
+                        class="device-card-requirement"
+                      ></p>
+                      <p id="camera-error" class="field-error" role="alert"></p>
+                      <button id="camera" class="primary full-width">
+                        Enable camera and microphone
+                      </button>
+                      <p class="device-card-hint">
+                        Choose Allow when your browser asks for access.
+                      </p>
+                    </article>
+                    <article class="device-setup-card" id="display-device-card">
+                      <div class="photo-card-heading">
+                        <span class="device-card-symbol screen-symbol"
+                          ><svg class="icon" aria-hidden="true">
+                            <use href="#icon-screen"></use></svg
+                        ></span>
+                        <div>
+                          <p class="eyebrow">02 · DISPLAY</p>
+                          <h3>Entire display</h3>
+                        </div>
+                      </div>
+                      <span id="screen-status" class="status-pill neutral"
+                        >Not shared</span
+                      >
+                      <div
+                        id="display-device-preview"
+                        class="device-card-preview"
+                      >
+                        <div
+                          id="display-device-placeholder"
+                          class="device-display-placeholder"
+                        >
+                          <svg class="icon" aria-hidden="true">
+                            <use href="#icon-screen"></use></svg
+                          ><strong>Your display preview</strong
+                          ><span
+                            >Share your entire screen to preview it here.</span
+                          >
+                        </div>
+                        <div
+                          id="display-preview"
+                          class="display-preview"
+                          hidden
+                        >
+                          <span>Local display preview</span>
+                        </div>
+                      </div>
+                      <p
+                        id="screen-requirement"
+                        class="device-card-requirement"
+                      ></p>
+                      <p
+                        id="screen-progress"
+                        class="device-card-hint"
+                        role="status"
+                      ></p>
+                      <p id="screen-error" class="field-error" role="alert"></p>
+                      <button id="screen" class="primary full-width">
+                        Share entire display
+                      </button>
+                      <button id="cancel-screen" class="text-button" hidden>
+                        Cancel display request
+                      </button>
+                      <p class="device-card-hint">
+                        In the browser picker, select Entire screen.
+                      </p>
+                    </article>
+                  </div>
+                  <details
+                    id="advanced-device-settings"
+                    class="device-settings-disclosure"
+                  >
+                    <summary>
+                      More device settings &amp; secondary camera
+                    </summary>
+                    <div
+                      id="setup-device-previews"
+                      class="setup-device-previews"
+                    ></div>
+                  </details>
+                  <div class="photo-step-footer device-step-footer">
+                    <div class="device-privacy-note">
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#icon-shield"></use>
+                      </svg>
+                      <p>
+                        These are local previews. Your ID upload and confirmed
+                        selfie are separate setup actions.
+                      </p>
+                    </div>
+                    <p id="capture-state" class="capture-summary" role="status">
+                      Check your required devices to continue.
+                    </p>
+                    <div class="photo-main-actions">
+                      <button class="text-button" data-go-step="5">
+                        ← Back to your details
+                      </button>
+                      <div>
+                        <button id="devices-next" class="primary">
+                          Continue to identity →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section id="enrollment-card" class="panel setup-card" hidden>
+                  <div class="card-heading">
+                    <span class="section-icon lavender"
+                      ><svg class="icon" aria-hidden="true">
+                        <use href="#icon-user"></use></svg
+                    ></span>
+                    <div>
+                      <p class="eyebrow">A little introduction</p>
+                      <h2>Your details</h2>
+                    </div>
+                  </div>
+                  <label id="demo-details-label" hidden
+                    >Demo student details
+                    <select id="demo-details">
+                      <option value="">Choose sample details…</option>
+                    </select>
+                    <small
+                      >Demo shortcut: fills your signed-in sample account.
+                      Confirm below to continue.</small
+                    >
+                  </label>
+                  <p>
+                    Enter any name and student number or email for this
+                    assessment. These details do not need to match your
+                    signed-in account.
+                  </p>
+                  <div class="student-details-grid">
+                    <label
+                      >Full name<input
+                        id="enrollment-name"
+                        autocomplete="name"
+                        maxlength="160"
+                    /></label>
+                    <label
+                      >Student number or email<input
+                        id="enrollment-reference"
+                        maxlength="254"
+                        autocomplete="username"
+                    /></label>
+                  </div>
+                  <div class="details-step-actions">
+                    <button class="text-button" data-go-step="1">
+                      ← Back to notice</button
+                    ><button id="confirm-enrollment" class="primary">
+                      Confirm &amp; next →
+                    </button>
+                  </div>
+                  <p id="enrollment-result" role="status"></p>
+                </section>
+                <section id="setup-step-3" class="panel setup-card" hidden>
+                  <div class="photo-step-header">
+                    <div>
+                      <p class="eyebrow">IDENTITY VERIFICATION</p>
+                      <h2>Let’s put a face to your name.</h2>
+                      <p id="identity-instructions" class="card-description">
+                        Add your ID photo and take a quick selfie.
+                      </p>
+                    </div>
+                    <div class="photo-progress" aria-live="polite">
+                      <span id="photo-ready-count">0 / 2</span
+                      ><small>photos ready</small>
+                    </div>
+                  </div>
+                  <p id="saved-evidence-note" role="status" hidden></p>
+                  <div class="photo-upload-grid">
+                    <article class="photo-capture-card" id="id-photo-card">
+                      <div class="photo-card-heading">
+                        <span class="photo-step-number">01</span>
+                        <div>
+                          <h3>Identity document</h3>
+                          <p>Official ID showing your name and photo</p>
+                        </div>
+                      </div>
+                      <span id="id-upload-status" class="status-pill neutral"
+                        >Add your ID photo</span
+                      >
+                      <img
+                        id="id-saved-preview"
+                        class="identity-preview"
+                        alt="Your saved ID image"
+                        hidden
+                      />
+                      <label for="id-file" class="upload-zone">
+                        <span class="upload-illustration"
+                          ><svg class="icon" aria-hidden="true">
+                            <use href="#icon-file"></use></svg
+                          ><span class="upload-plus" aria-hidden="true"
+                            >+</span
+                          ></span
+                        >
+                        <strong>Upload your official ID</strong
+                        ><span>JPG, PNG or WebP · up to 8 MB</span>
+                        <span class="upload-action"
+                          >Browse files <span aria-hidden="true">↗</span></span
+                        >
+                      </label>
+                      <input
+                        id="id-file"
+                        class="visually-hidden"
+                        type="file"
+                        aria-label="Official ID document showing your name and photo"
+                        accept="image/jpeg,image/png,image/webp"
+                      />
+                      <p id="id-file-name" class="selected-file"></p>
+                      <p class="photo-tip">
+                        <svg class="icon" aria-hidden="true">
+                          <use href="#icon-check"></use></svg
+                        >Upload the front of an official ID document with your
+                        full name and your photo clearly visible. Include all
+                        four corners.
+                      </p>
+                      <p id="id-quality" role="status"></p>
+                      <p
+                        id="id-upload-error"
+                        class="field-error"
+                        role="alert"
+                      ></p>
+                      <button id="upload-id" class="secondary" hidden>
+                        Retry upload
+                      </button>
+                    </article>
+                    <article class="photo-capture-card" id="selfie-photo-card">
+                      <div class="photo-card-heading">
+                        <span class="photo-step-number">02</span>
+                        <div>
+                          <h3>Camera selfie</h3>
+                          <p>A quick photo of you, right now</p>
+                        </div>
+                      </div>
+                      <span
+                        id="selfie-upload-status"
+                        class="status-pill neutral"
+                        >Take your selfie</span
+                      >
+                      <div id="selfie-live-stage" class="selfie-live-stage">
+                        <video
+                          id="identity-live-preview"
+                          autoplay
+                          muted
+                          playsinline
+                          aria-label="Selfie camera preview"
+                        ></video>
+                        <div
+                          id="selfie-camera-placeholder"
+                          class="selfie-camera-placeholder"
+                        >
+                          <svg class="icon" aria-hidden="true">
+                            <use href="#icon-camera"></use></svg
+                          ><span>Your camera preview appears here</span>
+                        </div>
+                        <span class="selfie-frame" aria-hidden="true"></span
+                        ><span class="camera-live-label">CAMERA PREVIEW</span>
+                      </div>
+                      <p id="selfie-instructions" class="photo-tip">
+                        Look straight ahead. Use good lighting and keep your
+                        face in the frame.
+                      </p>
+                      <button id="selfie" class="primary full-width">
+                        <svg class="icon" aria-hidden="true">
+                          <use href="#icon-camera"></use></svg
+                        >Capture camera selfie
+                      </button>
+                      <div
+                        id="selfie-preview-panel"
+                        class="selfie-preview-panel"
+                        hidden
+                      >
+                        <img
+                          id="selfie-still-preview"
+                          class="identity-preview"
+                          alt="Selfie photo"
+                        />
+                        <p id="selfie-draft-help">
+                          Happy with your photo? Confirm it below.
+                        </p>
+                        <div class="selfie-photo-actions">
+                          <button id="confirm-selfie" class="primary">
+                            Use this selfie</button
+                          ><button id="retake-selfie" class="secondary">
+                            Retake selfie
+                          </button>
+                        </div>
+                      </div>
+                      <p id="selfie-quality" role="status"></p>
+                      <p id="selfie-error" class="field-error" role="alert"></p>
+                    </article>
+                  </div>
+                  <!-- Face Match Result Panel -->
+                  <section
+                    id="face-match-result"
+                    class="face-match-result"
+                    aria-live="polite"
+                    hidden
+                  >
+                    <div id="face-match-success" class="face-match-card face-match-success" hidden>
+                      <div class="face-match-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                      </div>
+                      <div class="face-match-content">
+                        <span class="face-match-eyebrow">IDENTITY CONFIRMED</span>
+                        <h3>Faces match — you're good to go!</h3>
+                        <p>Your ID photo and selfie have been compared and appear to show the same person. You may proceed to begin your assessment.</p>
+                        <button id="face-match-continue" class="primary">Continue to exam setup
+                          <svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div id="face-match-fail" class="face-match-card face-match-fail" hidden>
+                      <div class="face-match-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                      </div>
+                      <div class="face-match-content">
+                        <span class="face-match-eyebrow">IDENTITY MISMATCH</span>
+                        <h3>Faces appear different</h3>
+                        <p id="face-match-fail-message">Your ID photo and selfie do not appear to match. Please retake your selfie or replace your ID photo and try again.</p>
+                        <div class="face-match-retries">
+                          <span class="face-retry-label">Attempts remaining:</span>
+                          <span id="face-retries-remaining" class="face-retry-count">5</span>
+                        </div>
+                        <div class="button-row">
+                          <button id="face-retry-selfie" class="secondary">Retake selfie</button>
+                          <button id="face-retry-id" class="secondary">Replace ID photo</button>
+                        </div>
+                        <p id="face-match-blocked-msg" class="face-match-blocked" hidden>
+                          ⚠️ Maximum retries reached. You cannot begin this exam without face verification. Contact your organizer.
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="photo-comparison-panel"
+                    class="photo-comparison-panel"
+                    aria-label="ID and selfie comparison result"
+                    hidden
+                  >
+                    <span class="comparison-symbol"
+                      ><svg class="icon" aria-hidden="true">
+                        <use href="#icon-shield"></use></svg
+                    ></span>
+                    <div>
+                      <h3 id="comparison-title">Your photo check</h3>
+                      <p id="comparison-result" role="status"></p>
+                      <details id="comparison-details" hidden>
+                        <summary>View comparison details</summary>
+                        <p id="comparison-metrics"></p>
+                      </details>
+                    </div>
+                  </section>
+                  <section
+                    id="photo-retry"
+                    class="photo-guidance"
+                    hidden
+                    aria-label="Photo check guidance"
+                  >
+                    <h3>Photo check guidance</h3>
+                    <p id="photo-retry-message" role="status"></p>
+                    <div class="button-row">
+                      <button id="retry-id" class="secondary">
+                        Replace ID photo</button
+                      ><button id="retry-selfie" class="secondary">
+                        Retake selfie
+                      </button>
+                    </div>
+                    <details>
+                      <summary>About image checks</summary>
+                      <p>
+                        Automated comparisons are advisory. Ask your organizer
+                        for another verification method if these checks cannot
+                        complete.
+                      </p>
+                    </details>
+                  </section>
+                  <div class="photo-step-footer">
+                    <p id="verification-state" class="verification-caption"></p>
+                    <div class="photo-main-actions">
+                      <button class="text-button" data-go-step="2">
+                        ← Back to devices
+                      </button>
+                      <div>
+                        <button id="verify" class="secondary">
+                          Request identity review</button
+                        ><button id="photos-next" class="primary">
+                          Next: final check →
+                        </button>
+                      </div>
+                    </div>
+                    <p id="verify-help" class="muted" role="status"></p>
+                    <p id="alternative-verification-note" class="muted" hidden>
+                      Account verification uses your signed-in institution
+                      account and required setup checks. The photo result
+                      remains available for review.
+                    </p>
+                    <button id="restart-setup" class="text-button">
+                      Start again with new photos
+                    </button>
+                  </div>
+                </section>
+                <section id="setup-step-4" class="panel setup-card" hidden>
+                  <div class="ready-symbol" id="ready-symbol">
+                    <svg class="icon" aria-hidden="true">
+                      <use href="#icon-clock"></use>
+                    </svg>
+                  </div>
+                  <p class="eyebrow center">FINAL CHECK</p>
+                  <h2 id="ready-title" class="center">
+                    Waiting for your proctor
+                  </h2>
+                  <p id="ready-description" class="center muted">
+                    Your identity documents are ready for review. This page
+                    updates automatically when your proctor makes a decision.
+                  </p>
+                  <p
+                    id="approval-status"
+                    class="center muted"
+                    role="status"
+                  ></p>
+                  <section
+                    class="notice-box"
+                    aria-label="Final ID and selfie result"
+                  >
+                    <h3>ID photo vs selfie</h3>
+                    <p id="final-face-result" role="status">
+                      No comparison result yet
+                    </p>
+                    <small id="final-face-note"
+                      >Automated comparison is an estimate.</small
+                    >
+                    <button class="text-button" data-go-step="3">
+                      Review or replace photos
+                    </button>
+                  </section>
+                  <button id="check-approval" class="secondary">
+                    Check approval now
+                  </button>
+                  <ul id="readiness-list" class="readiness-list"></ul>
+                  <p id="start-help" class="inline-status"></p>
+                  <div class="ready-actions">
+                    <button id="start" class="primary full-width">
+                      Begin assessment<svg class="icon" aria-hidden="true">
+                        <use href="#icon-arrow"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </section>
+              </div>
+              <section id="capture-recovery" class="panel" hidden>
+                <div class="card-heading">
+                  <span class="section-icon blue"
+                    ><svg class="icon" aria-hidden="true">
+                      <use href="#icon-camera"></use></svg
+                  ></span>
+                  <div>
+                    <h2>Capture controls</h2>
+                    <p>
+                      Reconnect your devices after a reload. Your deadline
+                      continues.
+                    </p>
+                  </div>
+                </div>
+                <div class="button-row">
+                  <button id="resume-camera" class="secondary">
+                    Re-enable camera and microphone</button
+                  ><button id="resume-screen" class="secondary">
+                    Re-enable entire display capture
+                  </button>
+                </div>
+              </section>
+              <section id="questions" class="panel" hidden></section>
+              <section
+                id="completion-receipt"
+                class="panel"
+                hidden
+                aria-labelledby="completion-title"
+              >
+                <p class="eyebrow">ATTEMPT RECEIPT</p>
+                <h2 id="completion-title">Assessment submitted</h2>
+                <p id="completion-message"></p>
+                <p id="completion-reference" class="muted"></p>
+                <details id="completion-responses">
+                  <summary>View saved responses</summary>
+                  <dl id="completion-answers"></dl>
+                </details>
+              </section>
+              <div class="submission-bar">
+                <p id="save-state" role="status"></p>
+                <button id="submit" class="primary" hidden>
+                  Save answers and submit<svg class="icon" aria-hidden="true">
+                    <use href="#icon-arrow"></use>
+                  </svg>
+                </button>
+              </div>
+              <button id="back" class="text-button back-button">
+                ← Return to dashboard
+              </button>
+            </div>
+            <aside class="session-aside">
+              <div class="panel preview-card">
+                <div class="preview-heading">
+                  <h2>Camera preview</h2>
+                  <span id="preview-status" class="status-pill neutral"
+                    >Off</span
+                  >
+                </div>
+                <div id="camera-frame" class="camera-frame">
+                  <video id="camera-preview" autoplay muted playsinline></video
+                  ><canvas
+                    id="face-overlay"
+                    aria-label="Sampled face detection overlay"
+                  ></canvas>
+                  <div class="camera-placeholder">
+                    <svg class="icon" aria-hidden="true">
+                      <use href="#icon-camera"></use></svg
+                    ><strong>Your camera preview</strong
+                    ><span>Enable your camera to see yourself here.</span>
+                  </div>
+                  <span class="camera-live-label"><i></i>LIVE</span>
+                </div>
+                <p id="face-live-status" role="status">Waiting for camera</p>
+                <div class="gaze-quick">
+                  <span id="gaze-brief" role="status"
+                    >Gaze: starts with exam</span
+                  ><button id="gaze-quick-calibrate" class="text-button small">
+                    Optional calibration
+                  </button>
+                </div>
+                <p id="live-warning" role="status" class="field-error"></p>
+                <button id="resume-audio" class="secondary" hidden>
+                  Resume sound monitoring
+                </button>
+                <details id="camera-monitoring-settings">
+                  <summary>Monitoring settings</summary>
+                  <section aria-label="Sound monitoring">
+                    <h3>Microphone</h3>
+                    <p id="audio-analysis-status" role="status">
+                      Sound monitoring starts after Begin assessment.
+                    </p>
+                    <meter
+                      id="sound-meter"
+                      min="0"
+                      max="1"
+                      value="0"
+                      aria-label="Microphone sound level"
+                    ></meter>
+                    <span id="sound-value">No sample yet</span>
+                    <small
+                      >Sound observations cannot identify a speaker or establish
+                      that answers were whispered.</small
+                    >
+                  </section>
+                  <section
+                    class="gaze-widget"
+                    aria-label="Calibrated gaze estimates"
+                  >
+                    <h3>Gaze calibration</h3>
+                    <p>
+                      Automatic checks need no calibration. Optional screen
+                      calibration may be inaccurate; your exam timer continues
+                      during recalibration.
+                    </p>
+                    <button id="calibrate-gaze" class="secondary">
+                      Calibrate gaze
+                    </button>
+                    <p id="gaze-status" role="status"></p>
+                  </section>
+                  <p id="face-continuity-status" role="status">
+                    Live face consistency starts after Begin when face
+                    comparison is enabled.
+                  </p>
+                  <p class="preview-hint">
+                    Automatic direction estimates are approximate. Optional
+                    screen-position estimates require calibration and
+                    validation.
+                  </p>
+                </details>
+                <p class="preview-hint">
+                  Keep your face centered and your space well lit.
+                </p>
+              </div>
+              <details id="monitoring-panel" class="panel monitoring-panel">
+                <summary>Device monitoring details</summary>
+
+                <dl class="monitoring-grid">
+                  <dt>Sound level</dt>
+                  <dd>See the microphone meter above.</dd>
+                  <dt>Recording</dt>
+                  <dd id="recording-live-status">Not active</dd>
+                  <dt>Capture</dt>
+                  <dd id="capture-counts">No synchronized samples yet</dd>
+                  <dt>Quality profile</dt>
+                  <dd id="capture-profile">Standard</dd>
+                  <dt>Network</dt>
+                  <dd id="network-measurement">Measuring uploads</dd>
+                  <dt>Activity</dt>
+                  <dd id="behavior-status">Aggregate monitoring only</dd>
+                  <dt>Displays</dt>
+                  <dd id="display-inventory">
+                    Not checked. Select Check displays to request permission.
+                  </dd>
+                </dl>
+                <button id="check-displays" class="secondary small">
+                  Check displays
+                </button>
+                <p id="remote-capability">
+                  A website cannot reliably scan operating-system remote-control
+                  tools. Your organizer can require an approved lockdown client.
+                </p>
+                <button id="report-remote-help" class="text-button small">
+                  Report remote assistance concern
+                </button>
+
+                <small
+                  >Observations require review. They do not establish
+                  misconduct. Face boxes show the latest sampled image, not
+                  every video frame.</small
+                >
+              </details>
+              <details id="mobile-setup" class="panel mobile-card">
+                <summary>
+                  <span
+                    ><svg class="icon" aria-hidden="true">
+                      <use href="#icon-phone"></use></svg
+                    >Secondary camera</span
+                  ><span id="mobile-requirement" class="optional-label"
+                    >Optional</span
+                  >
+                </summary>
+                <div class="mobile-body">
+                  <div id="mobile-frame" class="camera-frame mobile-frame">
+                    <video
+                      id="mobile-preview"
+                      autoplay
+                      muted
+                      playsinline
+                    ></video>
+                    <div class="camera-placeholder">
+                      <svg class="icon" aria-hidden="true">
+                        <use href="#icon-phone"></use></svg
+                      ><strong>Connect your phone</strong
+                      ><span>A second view of your workspace.</span>
+                    </div>
+                  </div>
+                  <p id="phone-local-help" hidden>
+                    Phone pairing is unavailable on localhost. This phone camera
+                    is optional and does not block this assessment.
+                    <a
+                      id="phone-demo-link"
+                      target="_blank"
+                      rel="noreferrer"
+                      hidden
+                      >Open the separate HTTPS phone demo</a
+                    >
+                    (separate test account; current uploads stay here).
+                  </p>
+                  <p id="mobile-state">No confirmed mobile camera.</p>
+                  <div class="button-row">
+                    <button id="pair" class="secondary small">
+                      Pair mobile camera</button
+                    ><button id="revoke-mobile" class="text-button small">
+                      Disconnect mobile
+                    </button>
+                  </div>
+                  <div id="pair-info" class="pair-info" hidden>
+                    <img id="pair-qr" alt="Scan to pair your phone" />
+                    <p>
+                      <a id="pair-link" target="_blank" rel="noreferrer"
+                        >Open pairing link on phone</a
+                      >
+                    </p>
+                    <label
+                      >Six-digit code shown on phone<input
+                        id="pair-code"
+                        inputmode="numeric"
+                        maxlength="6"
+                        placeholder="000000" /></label
+                    ><button id="confirm-mobile" class="primary full-width">
+                      Confirm device
+                    </button>
+                  </div>
+                </div>
+              </details>
+              <div class="session-info-card">
+                <span
+                  ><svg class="icon" aria-hidden="true">
+                    <use href="#icon-lock"></use></svg
+                ></span>
+                <div>
+                  <h3>You're in control</h3>
+                  <p id="control-note">
+                    Your assessment starts only after the required checks and
+                    identity review are complete.
+                  </p>
+                </div>
+              </div>
+              <div class="sync-card">
+                <span id="sync-indicator" class="sync-dot"></span>
+                <p id="queue-state">Checking synchronization…</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+        <section id="review" hidden>
+          <div class="student-review-heading">
+            <div>
+              <p class="eyebrow">STUDENT REVIEW</p>
+              <h1>Student assessment report</h1>
+              <p class="muted">
+                Identity, responses and the complete assessment timeline.
+              </p>
+            </div>
+            <button id="review-back" class="secondary">
+              Return to students
+            </button>
+          </div>
+          <div id="review-state" class="review-summary"></div>
+          <nav class="review-sections" aria-label="Student report sections">
+            <a href="#review-identity">Identity</a
+            ><a href="#review-recording">Recording</a>
+            <a href="#review-responses">Answers</a
+            ><a href="#history-title">Violations</a>
+          </nav>
+          <section id="review-identity" class="panel">
+            <div class="report-section-title">
+              <span>01</span>
+              <div>
+                <h2>Student identity</h2>
+                <p class="muted">
+                  The ID and selfie submitted for this attempt.
+                </p>
+              </div>
+            </div>
+            <div id="review-identity-images" class="identity-review-grid"></div>
+            <details class="staff-review-controls">
+              <summary>Identity review decision</summary>
+              <label
+                >Reason and enrollment-record checks<textarea
+                  id="review-reason"
+                  minlength="10"
+                ></textarea>
+              </label>
+              <button id="approve">Approve identity</button
+              ><button id="reject" class="secondary">Reject identity</button>
+            </details>
+          </section>
+          <section id="review-recording" class="panel">
+            <div class="report-section-title">
+              <span>02</span>
+              <div>
+                <h2>Full assessment recording</h2>
+                <p class="muted">
+                  One video for all saved screen-recording segments.
+                </p>
+              </div>
+            </div>
+            <div class="recording-stage">
+              <video
+                id="review-video"
+                controls
+                playsinline
+                preload="metadata"
+                aria-label="Full assessment recording"
+              ></video>
+            </div>
+            <div
+              id="recording-markers"
+              class="recording-markers"
+              aria-label="Incident markers"
+            ></div>
+            <div class="recording-controls">
+              <p id="recording-status" role="status">
+                Checking recording availability…
+              </p>
+              <button id="load-recording" class="secondary">
+                Prepare full recording
+              </button>
+              <a
+                id="download-recording"
+                download="assessment-recording.mp4"
+                hidden
+                >Download video</a
+              >
+            </div>
+            <p id="recording-timing-note" class="muted" hidden>
+              Incident markers use approximate server timestamps. Recording
+              interruptions are omitted from the combined video.
+            </p>
+          </section>
+          <section id="review-responses" class="panel">
+            <div class="report-section-title">
+              <span>03</span>
+              <div>
+                <h2>Student answers</h2>
+                <p id="review-answer-count" class="muted"></p>
+              </div>
+            </div>
+            <div id="review-answers" class="answer-review-list"></div>
+          </section>
+          <section class="panel review-history" aria-labelledby="history-title">
+            <div class="history-heading">
+              <div>
+                <p class="eyebrow">ATTEMPT HISTORY</p>
+                <h2 id="history-title">Violations &amp; incident history</h2>
+              </div>
+              <button id="refresh-history" class="secondary">
+                Refresh history
+              </button>
+            </div>
+            <p>
+              One row per incident, newest first. Resize and fullscreen recovery
+              updates stay together. Staff confirmation counts an incident once.
+            </p>
+            <div class="history-toolbar">
+              <label
+                >Review status<select id="history-filter">
+                  <option value="incidents">All incidents</option>
+                  <option value="pending">Awaiting review</option>
+                  <option value="confirmed_by_reviewer">
+                    Confirmed violations
+                  </option>
+                  <option value="needs_followup">Needs follow-up</option>
+                  <option value="dismissed">Dismissed</option>
+                  <option value="warnings">Camera warnings</option>
+                  <option value="information">Routine checks</option>
+                  <option value="all">All records</option>
+                </select></label
+              >
+              <label
+                >Search history<input
+                  id="history-search"
+                  type="search"
+                  placeholder="Search by incident name"
+              /></label>
+            </div>
+            <p id="history-count" role="status" class="muted"></p>
+            <div id="observations" class="stack"></div>
+            <button id="more-observations" class="secondary">
+              Load older records
+            </button>
+          </section>
+          <details class="panel staff-review-controls">
+            <summary>Final staff decision</summary>
+            <label
+              >Overall review<select id="overall-review">
+                <option value="cleared">Cleared</option>
+                <option value="needs_followup">Needs follow-up</option>
+                <option value="reviewed">Reviewed</option>
+              </select></label
+            ><button id="save-review">Save review</button
+            ><button id="terminate" class="danger">
+              End assessment as staff
+            </button>
+          </details>
+        </section>
+        <section id="mobile-panel" class="panel" hidden>
+          <div id="mobile-error" class="mobile-error" role="alert" hidden>
+            <h2 id="mobile-error-title">Phone connection unavailable</h2>
+            <p id="mobile-error-detail"></p>
+            <button id="mobile-retry" class="secondary">Try again</button>
+          </div>
+          <h1>Secondary camera</h1>
+          <p id="mobile-notice"></p>
+          <p id="mobile-code"></p>
+          <p id="mobile-status">Waiting to pair.</p>
+          <video id="phone-preview" autoplay muted playsinline></video>
+          <label class="check"
+            ><input id="mobile-consent" type="checkbox" />I agree to the
+            assessment’s secondary camera capture.</label
+          >
+          <button id="phone-start">Enable camera after confirmation</button
+          ><button id="phone-stop" class="secondary">Stop camera</button>
+          <p>
+            Keep this page open and the phone powered. If live video cannot
+            connect, encrypted camera snapshots and recording chunks continue to
+            upload.
+          </p>
+        </section>
+        <details id="account-panel" class="panel" hidden>
+          <summary>Change password</summary>
+          <form id="password-form">
+            <label
+              >Current password<input
+                name="current_password"
+                type="password"
+                required
+                autocomplete="current-password" /></label
+            ><label
+              >New password<input
+                name="new_password"
+                type="password"
+                minlength="14"
+                required
+                autocomplete="new-password" /></label
+            ><button>Change password and sign out all devices</button>
+          </form>
+        </details>
+      </main>
+      <nav class="mobile-nav" aria-label="Workspace navigation">
+        <button data-nav="assessments" class="active">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-grid"></use></svg
+          >Assessments</button
+        ><button data-nav="history">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-clock"></use></svg
+          >History</button
+        ><button data-nav="manage" hidden>
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-gear"></use></svg
+          >Manage</button
+        ><button data-nav="account">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-user"></use></svg
+          >Account
+        </button>
+      </nav>
+      <footer class="app-footer">
+        <span>© Proctix</span
+        ><span>Assessment workspace · Contact your organizer for support</span>
+      </footer>
+    </div>
+  </body>
+</html>

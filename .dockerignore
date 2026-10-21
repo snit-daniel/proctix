@@ -1,0 +1,10 @@
+.git
+.venv
+node_modules
+var
+.env
+.env.*
+legacy
+models
+playwright-report
+test-results

@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-20",
+  "sqlite": {
+    "passed": 38,
+    "skipped": 1,
+    "note": "PostgreSQL-only concurrency check is skipped on SQLite"
+  },
+  "postgresql": {
+    "passed": 39,
+    "note": "Isolated real PostgreSQL; includes concurrent start/save regressions"
+  },
+  "browser": {
+    "passed": 5,
+    "browser": "Installed Chrome in an isolated Playwright profile",
+    "inputs": "Synthetic camera/display streams",
+    "includes": "Guided setup, navigation, reload/offline recovery, mobile camera, recording, WCAG A/AA automated checks at desktop and phone widths"
+  },
+  "dependency_audit": {
+    "known_vulnerabilities": 0,
+    "runtime_packages_checked": 34
+  },
+  "limitations": [
+    "Physical Windows/macOS Safe Exam Browser builds not tested",
+    "Physical iOS/Android/TURN networks not tested",
+    "No target-population biometric accuracy measured",
+    "No cloud deployment or capacity certification performed",
+    "No independent penetration test performed"
+  ]
+}

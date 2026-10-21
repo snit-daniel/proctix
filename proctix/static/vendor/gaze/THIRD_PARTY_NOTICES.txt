@@ -1,0 +1,12 @@
+MediaPipe Tasks Vision 0.10.32
+Copyright The MediaPipe Authors. Apache License, Version 2.0.
+Source: https://github.com/google-ai-edge/mediapipe
+Runtime installed from @mediapipe/tasks-vision, integrity pinned in package-lock.json.
+
+FaceLandmarker model bundle, float16, version 1
+Source: https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task
+SHA-256: 64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff
+Documentation: https://developers.google.com/mediapipe/solutions/vision/face_landmarker
+
+The calibration, prediction and validation code in gaze.js is original Proctix code.
+No WebGazer, RealEye, Gaze360 or research-only gaze weights are distributed.
