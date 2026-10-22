@@ -1205,37 +1205,79 @@
                     aria-live="polite"
                     hidden
                   >
-                    <div id="face-match-success" class="face-match-card face-match-success" hidden>
+                    <div
+                      id="face-match-success"
+                      class="face-match-card face-match-success"
+                      hidden
+                    >
                       <div class="face-match-icon">
-                        <svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                        <svg class="icon" aria-hidden="true">
+                          <use href="#icon-check"></use>
+                        </svg>
                       </div>
                       <div class="face-match-content">
-                        <span class="face-match-eyebrow">IDENTITY CONFIRMED</span>
+                        <span class="face-match-eyebrow"
+                          >IDENTITY CONFIRMED</span
+                        >
                         <h3>Faces match — you're good to go!</h3>
-                        <p>Your ID photo and selfie have been compared and appear to show the same person. You may proceed to begin your assessment.</p>
-                        <button id="face-match-continue" class="primary">Continue to exam setup
-                          <svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg>
+                        <p>
+                          Your ID photo and selfie have been compared and appear
+                          to show the same person. You may proceed to begin your
+                          assessment.
+                        </p>
+                        <button id="face-match-continue" class="primary">
+                          Continue to exam setup
+                          <svg class="icon" aria-hidden="true">
+                            <use href="#icon-arrow"></use>
+                          </svg>
                         </button>
                       </div>
                     </div>
-                    <div id="face-match-fail" class="face-match-card face-match-fail" hidden>
+                    <div
+                      id="face-match-fail"
+                      class="face-match-card face-match-fail"
+                      hidden
+                    >
                       <div class="face-match-icon">
-                        <svg class="icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                        <svg class="icon" aria-hidden="true">
+                          <use href="#icon-shield"></use>
+                        </svg>
                       </div>
                       <div class="face-match-content">
-                        <span class="face-match-eyebrow">IDENTITY MISMATCH</span>
+                        <span class="face-match-eyebrow"
+                          >IDENTITY MISMATCH</span
+                        >
                         <h3>Faces appear different</h3>
-                        <p id="face-match-fail-message">Your ID photo and selfie do not appear to match. Please retake your selfie or replace your ID photo and try again.</p>
+                        <p id="face-match-fail-message">
+                          Your ID photo and selfie do not appear to match.
+                          Please retake your selfie or replace your ID photo and
+                          try again.
+                        </p>
                         <div class="face-match-retries">
-                          <span class="face-retry-label">Attempts remaining:</span>
-                          <span id="face-retries-remaining" class="face-retry-count">5</span>
+                          <span class="face-retry-label"
+                            >Attempts remaining:</span
+                          >
+                          <span
+                            id="face-retries-remaining"
+                            class="face-retry-count"
+                            >5</span
+                          >
                         </div>
                         <div class="button-row">
-                          <button id="face-retry-selfie" class="secondary">Retake selfie</button>
-                          <button id="face-retry-id" class="secondary">Replace ID photo</button>
+                          <button id="face-retry-selfie" class="secondary">
+                            Retake selfie
+                          </button>
+                          <button id="face-retry-id" class="secondary">
+                            Replace ID photo
+                          </button>
                         </div>
-                        <p id="face-match-blocked-msg" class="face-match-blocked" hidden>
-                          ⚠️ Maximum retries reached. You cannot begin this exam without face verification. Contact your organizer.
+                        <p
+                          id="face-match-blocked-msg"
+                          class="face-match-blocked"
+                          hidden
+                        >
+                          ⚠️ Maximum retries reached. You cannot begin this exam
+                          without face verification. Contact your organizer.
                         </p>
                       </div>
                     </div>

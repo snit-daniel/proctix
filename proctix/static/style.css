@@ -821,71 +821,71 @@ label {
   color: #686177;
   margin: 18px 0;
 
-/* Face match result panels */
-.face-match-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 24px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 2px 4px #00000008;
-}
+  /* Face match result panels */
+  .face-match-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 4px #00000008;
+  }
 
-.face-match-icon {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: #e6f4ed; /* light green background for success */
-}
+  .face-match-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #e6f4ed; /* light green background for success */
+  }
 
-.face-match-success .face-match-icon {
-  background: #e6f4ed;
-  color: #2b775c;
-}
+  .face-match-success .face-match-icon {
+    background: #e6f4ed;
+    color: #2b775c;
+  }
 
-.face-match-fail .face-match-icon {
-  background: #ffe6e6;
-  color: #a74854;
-}
+  .face-match-fail .face-match-icon {
+    background: #ffe6e6;
+    color: #a74854;
+  }
 
-.face-match-content {
-  flex: 1;
-}
+  .face-match-content {
+    flex: 1;
+  }
 
-.face-match-eyebrow {
-  display: block;
-  font-size: 12px;
-  font-weight: 550;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  color: var(--muted);
-}
+  .face-match-eyebrow {
+    display: block;
+    font-size: 12px;
+    font-weight: 550;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--muted);
+  }
 
-.face-match-retries {
-  margin: 12px 0;
-  font-size: 13px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+  .face-match-retries {
+    margin: 12px 0;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-.face-retry-count {
-  font-weight: 650;
-  color: #a74854;
-}
+  .face-retry-count {
+    font-weight: 650;
+    color: #a74854;
+  }
 
-.face-match-blocked {
-  margin-top: 12px;
-  color: #a74854;
-  font-weight: 550;
-}
+  .face-match-blocked {
+    margin-top: 12px;
+    color: #a74854;
+    font-weight: 550;
+  }
 }
 input,
 textarea,

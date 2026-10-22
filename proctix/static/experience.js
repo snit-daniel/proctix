@@ -490,8 +490,11 @@ class MonitoringExperience {
     this.el("confirmed-violation-count").textContent =
       `${this.data?.confirmed_violation_count || 0} / 5 proctor-confirmed violations. At five, your latest server-saved answers are automatically submitted. Automated observations alone do not count.`;
     // Auto‑submit if confirmed violations reach threshold
-    if (this.active() && !this.state.submitting &&
-        (this.data?.confirmed_violation_count || 0) >= 5) {
+    if (
+      this.active() &&
+      !this.state.submitting &&
+      (this.data?.confirmed_violation_count || 0) >= 5
+    ) {
       void this.context.submit().catch((error) => {
         this.el("monitoring-sync").textContent = error.message;
       });
