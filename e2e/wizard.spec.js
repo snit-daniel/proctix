@@ -16,7 +16,17 @@ test.afterEach(async ({ page }) => {
   const current = await page.request.get(`/api/sessions/${sid}`);
   if (!current.ok()) return;
   const attempt = await current.json();
-  if (attempt.id !== sid || attempt.status !== "preflight") return;
+  if (attempt.id !== sid) return;
+  if (attempt.status === "in_progress") {
+    await page.request.post(`/api/sessions/${sid}/submit`, {
+      headers: {
+        Origin: "http://localhost:8765",
+        "X-CSRF-Token": me.csrf_token,
+      },
+    });
+    return;
+  }
+  if (attempt.status !== "preflight") return;
   await page.request.post(`/api/sessions/${sid}/consent`, {
     headers: { Origin: "http://localhost:8765", "X-CSRF-Token": me.csrf_token },
     data: { accepted: false },
@@ -335,6 +345,7 @@ test("gaze runtime loads locally and cannot calibrate an unreadable synthetic fa
   await open(page);
   await details(page);
   await page.locator("#camera").click();
+  await page.locator("#advanced-device-settings > summary").click();
   await page.locator("#camera-monitoring-settings > summary").click();
   await page.locator("#calibrate-gaze").click();
   await expect(page.locator("#gaze-calibration")).toBeVisible({
@@ -577,6 +588,7 @@ test("fullscreen exit allows five seconds, recovery cancels, and expiry submits 
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await page.clock.install();
+  await page.clock.pauseAt(new Date());
   await page.evaluate(() => {
     window.testFullscreen = true;
     Object.defineProperty(document, "fullscreenElement", {

@@ -211,7 +211,7 @@
                     name="institution"
                     required
                     autocomplete="organization"
-                    pattern="[a-z0-9-]+"
+                    pattern="[a-z0-9\-]+"
                     placeholder="e.g. your-school"
                   /><span class="field-hint"
                     >Your organizer will provide this code.</span
@@ -369,7 +369,7 @@
                 >Institution student number<input
                   id="student-number"
                   maxlength="80"
-                  pattern="[A-Za-z0-9._-]+"
+                  pattern="[A-Za-z0-9._\-]+"
                   required /></label
               ><button class="primary">Save student number</button>
             </form>
@@ -382,7 +382,7 @@
                   >Institution student number (optional)<input
                     name="student_number"
                     maxlength="80"
-                    pattern="[A-Za-z0-9._-]*"
+                    pattern="[A-Za-z0-9._\-]*"
                 /></label>
                 <label
                   >Full name<input

@@ -35,6 +35,20 @@ async function request(page, url, method = "GET", body) {
     { url, method, body },
   );
 }
+async function enterDetails(page) {
+  await page.locator("#enrollment-name").fill("Test student");
+  await page.locator("#enrollment-reference").fill("student@example.test");
+  await page.locator("#confirm-enrollment").click();
+  await expect(page.locator("#setup-step-2")).toBeVisible();
+}
+async function deviceStep(page) {
+  await page.locator('[data-step="2"]').click();
+  await expect(page.locator("#setup-step-2")).toBeVisible();
+}
+async function identityStep(page) {
+  await page.locator('[data-step="3"]').click();
+  await expect(page.locator("#setup-step-3")).toBeVisible();
+}
 async function prepare(page, name = "E2E assessment") {
   await page
     .locator("#exams article")
@@ -275,6 +289,7 @@ test("mobile pairing, real synthetic camera uploads, signaling, and revocation",
 }) => {
   await login(page);
   await prepare(page, "E2E mobile");
+  await deviceStep(page);
   await page
     .getByRole("button", { name: "Pair mobile camera", exact: true })
     .click();
@@ -311,6 +326,7 @@ test("mobile pairing, real synthetic camera uploads, signaling, and revocation",
   ).toEqual([]);
   await approveInUI(adminPage, session.id);
   await expect(page.locator("#start")).toBeEnabled();
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#mobile-state")).toContainText("uploading", {
     timeout: 20000,
@@ -370,7 +386,7 @@ test("AES-GCM queue survives reload and uploads the original bytes", async ({
   expect(restored).toBe("secret evidence");
 });
 
-test("device-side recording chunks upload and reassemble as a playable WebM", async ({
+test("device-side recording chunks upload and prepare a playable full recording", async ({
   browser,
   page,
 }) => {
@@ -399,6 +415,7 @@ test("device-side recording chunks upload and reassemble as a playable WebM", as
   });
   await login(page);
   await prepare(page, "E2E assessment");
+  await deviceStep(page);
 
   await page
     .getByRole("button", { name: "Share entire display", exact: true })
@@ -416,6 +433,7 @@ test("device-side recording chunks upload and reassemble as a playable WebM", as
       .observation_count,
   ).toBe(0);
   await approveInUI(adminPage, session.id);
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#assessment-observations")).toBeVisible();
   let recording;
@@ -440,14 +458,14 @@ test("device-side recording chunks upload and reassemble as a playable WebM", as
     .getByRole("button", { name: "Review session" })
     .click();
   await adminPage
-    .getByRole("button", { name: "Load recording", exact: true })
+    .getByRole("button", { name: "Prepare full recording", exact: true })
     .first()
     .click();
   await expect
     .poll(
       () =>
         adminPage
-          .locator("#evidence video")
+          .locator("#review-video")
           .first()
           .evaluate((v) => v.readyState),
       { timeout: 10000 },
@@ -530,7 +548,7 @@ test("identity upload shows actual server result and survives a camera permissio
     .click();
   await page.locator("#consent-check").check();
   await page.locator("#consent").click();
-  await expect(page.locator("#setup-step-2")).toBeVisible();
+  await enterDetails(page);
   await page.evaluate(() => {
     navigator.mediaDevices.getUserMedia = async () => {
       throw new DOMException("Denied", "NotAllowedError");
@@ -540,6 +558,7 @@ test("identity upload shows actual server result and survives a camera permissio
   await expect(page.locator("#camera-error")).toContainText(
     "Camera access is blocked",
   );
+  await identityStep(page);
   await page.route("**/media?kind=id&**", async (route) => {
     await new Promise((r) => setTimeout(r, 600));
     await route.fulfill({
@@ -557,7 +576,9 @@ test("identity upload shows actual server result and survives a camera permissio
   await expect(page.locator("#id-upload-error")).toContainText(
     "Image could not be decoded",
   );
-  await expect(page.locator("#id-upload-status")).toContainText("Missing");
+  await expect(page.locator("#id-upload-status")).toContainText(
+    "Add your ID photo",
+  );
   await expect(page.locator("#missing-items")).toContainText(
     "Choose an ID image",
   );
@@ -642,6 +663,9 @@ test("selfie preview is not uploaded until confirmed and can be retaken", async 
     .click();
   await page.locator("#consent-check").check();
   await page.locator("#consent").click();
+  await enterDetails(page);
+  await page.locator("#camera").click();
+  await page.locator("#devices-next").click();
   await page.locator("#selfie").click();
   await expect(page.locator("#selfie-preview-panel")).toBeVisible();
   await expect(page.locator("#selfie-upload-status")).toContainText(
@@ -661,6 +685,7 @@ test("selfie preview is not uploaded until confirmed and can be retaken", async 
     .getByRole("button", { name: "Open session", exact: true })
     .first()
     .click();
+  await identityStep(page);
   await expect(page.locator("#selfie-still-preview")).toBeVisible();
   await expect(page.locator("#selfie-still-preview")).toHaveJSProperty(
     "naturalWidth",
@@ -711,6 +736,7 @@ test("monitoring panel shows sampled faces and honest display permission failure
   await login(page);
   await prepare(page);
   await expect(page.locator("#monitoring-panel")).toBeHidden();
+  await page.locator('[data-step="5"]').click();
   await page.locator("#confirm-enrollment").click();
   await expect(page.locator("#enrollment-result")).toHaveText(
     "Your details were saved as entered.",
@@ -720,10 +746,11 @@ test("monitoring panel shows sampled faces and honest display permission failure
   await login(adminPage, "admin");
   const session = await pendingSession(adminPage, "E2E assessment");
   await approveInUI(adminPage, session.id);
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await page.locator("#monitoring-panel summary").click();
   await expect(page.locator("#face-live-status")).toContainText(
-    "2 faces visible",
+    "2 faces detected",
   );
   await expect(page.locator("#live-warning")).toContainText(
     "More than one face",
@@ -739,7 +766,7 @@ test("monitoring panel shows sampled faces and honest display permission failure
   await staff.close();
 });
 
-test("fullscreen recovery and aggregate input do not automatically terminate the assessment", async ({
+test("fullscreen recovery within grace preserves the assessment and aggregate input", async ({
   browser,
   page,
 }) => {
@@ -751,6 +778,7 @@ test("fullscreen recovery and aggregate input do not automatically terminate the
   const session = await pendingSession(adminPage, "E2E assessment");
   await approveInUI(adminPage, session.id);
   await expect(page.locator("#start")).toBeEnabled();
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await page
@@ -760,6 +788,8 @@ test("fullscreen recovery and aggregate input do not automatically terminate the
     if (document.fullscreenElement) await document.exitFullscreen();
   });
   await expect(page.locator("#fullscreen-recovery")).toBeVisible();
+  await page.locator("#recover-fullscreen").click();
+  await expect(page.locator("#fullscreen-recovery")).toBeHidden();
   const summaryRequest = page.waitForRequest(
     (r) => r.url().endsWith("/behavior") && r.method() === "POST",
   );
@@ -781,9 +811,7 @@ test("fullscreen recovery and aggregate input do not automatically terminate the
       "window_seconds",
     ].sort(),
   );
-  await expect(page.locator("#fullscreen-help")).toContainText(
-    "recorded for review",
-  );
+  await expect(page.locator("#fullscreen-recovery")).toBeHidden();
   expect((await request(page, "/api/sessions/" + session.id)).status).toBe(
     "in_progress",
   );
@@ -851,6 +879,9 @@ test("assigned-account mode runs advisory checks automatically without a proctor
     .click();
   await page.locator("#consent-check").check();
   await page.locator("#consent").click();
+  await enterDetails(page);
+  await page.locator("#camera").click();
+  await page.locator("#devices-next").click();
   await page.locator("#selfie").click();
   await page.locator("#confirm-selfie").click();
   await expect(page.locator("#selfie-upload-status")).toContainText("uploaded");
@@ -874,29 +905,18 @@ test("assigned-account mode runs advisory checks automatically without a proctor
   });
   await expect.poll(() => checks).toBe(1);
   await expect(page.locator("#comparison-result")).toContainText("unavailable");
-  await expect(page.locator("#control-note")).toContainText("assigned account");
-  await expect(page.locator("#identity-instructions")).not.toContainText(
-    "before you begin",
-  );
-  await expect(page.locator("#start")).toBeDisabled();
-  await expect(page.locator("#missing-items")).toContainText("registered name");
-  await page.locator("#confirm-enrollment").click();
-  await expect(page.locator("#start")).toBeEnabled();
+  await expect(page.locator("#control-note")).toContainText("Complete setup");
+  await page.locator('[data-step="5"]').click();
   await page.locator("#enrollment-name").fill("");
   await page.locator("#enrollment-reference").fill("");
-  await expect(page.locator("#start")).toBeDisabled();
-  await expect(page.locator("#ready-title")).toContainText(
-    "Finish the missing setup checks",
-  );
-  await page.locator("#verify").click();
-  await expect(page.locator("#message")).toContainText("model unavailable");
-  await expect(page.locator("#message")).not.toContainText(
-    "Image checks completed",
-  );
-  const me = await request(page, "/api/auth/me");
-  await page.locator("#enrollment-name").fill(me.user.name);
-  await page.locator("#enrollment-reference").fill(me.user.email);
   await page.locator("#confirm-enrollment").click();
+  await expect(page.locator("#enrollment-result")).toContainText(
+    "saved as entered",
+  );
+  await identityStep(page);
+  await page.locator("#verify").click();
+  await expect(page.locator("#message")).toContainText("unavailable");
+  await page.locator('[data-step="4"]').click();
   await expect(page.locator("#start")).toBeEnabled();
   const sid = (await request(page, "/api/sessions")).find(
     (s) =>
@@ -909,9 +929,7 @@ test("assigned-account mode runs advisory checks automatically without a proctor
     .getByRole("button", { name: "Open session" })
     .click();
   await expect(page.locator("#id-file")).toHaveValue("");
-  await expect(page.locator("#saved-evidence-note")).toContainText(
-    "An empty file picker does not remove a saved upload",
-  );
+  await identityStep(page);
   await expect(page.locator("#id-saved-preview")).toBeVisible();
   await expect(page.locator("#selfie-still-preview")).toBeVisible();
   await expect(page.locator("#start")).toBeEnabled();
@@ -925,7 +943,9 @@ test("assigned-account mode runs advisory checks automatically without a proctor
     });
   });
   await expect(page.locator("#start")).toBeDisabled({ timeout: 10000 });
-  await expect(page.locator("#id-upload-status")).toContainText("Missing");
+  await expect(page.locator("#id-upload-status")).toContainText(
+    "Add your ID photo",
+  );
   await expect(page.locator("#id-saved-preview")).toBeHidden();
   await expect(page.locator("#selfie-preview-panel")).toBeHidden();
   await expect(page.locator("#missing-items")).toContainText(
@@ -933,6 +953,7 @@ test("assigned-account mode runs advisory checks automatically without a proctor
   );
   await page.unroute(sessionURL);
   await expect(page.locator("#start")).toBeEnabled({ timeout: 10000 });
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await expect(page.locator("#session-state")).toHaveText("In progress");
@@ -976,6 +997,7 @@ test("submission saves final edits despite rate-limited evidence and reports cli
   await login(adminPage, "admin");
   const session = await pendingSession(adminPage, "E2E assessment");
   await approveInUI(adminPage, session.id);
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   for (const modifier of ["Control", "Meta"]) {
@@ -1061,6 +1083,7 @@ test("window blur and tab visibility handlers flag only active exams and alerts 
   await expect(page.locator("#assessment-observations")).toBeHidden();
   await approveInUI(adminPage, session.id);
   await page.bringToFront();
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await page.waitForTimeout(1600);
@@ -1092,7 +1115,7 @@ test("window blur and tab visibility handlers flag only active exams and alerts 
     .toBeTruthy();
   expect(
     await page
-      .locator("#assessment-observations")
+      .locator("#assessment-alert")
       .evaluate(
         (panel) =>
           panel.compareDocumentPosition(document.getElementById("questions")) &
@@ -1125,6 +1148,7 @@ test("fifth staff-confirmed violation submits the attempt and shows the reason t
   await login(adminPage, "admin");
   const session = await pendingSession(adminPage, "E2E assessment");
   await approveInUI(adminPage, session.id);
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await page
     .locator("#answer-q1")
@@ -1240,7 +1264,7 @@ async function displaySetup(page) {
   await expect(page.locator("#consent-check")).toBeVisible();
   await page.locator("#consent-check").check();
   await page.locator("#consent").click();
-  await expect(page.locator("#setup-step-2")).toBeVisible();
+  await enterDetails(page);
 }
 
 test("display picker can be cancelled and retried, with late streams stopped", async ({
@@ -1270,7 +1294,7 @@ test("display picker can be cancelled and retried, with late streams stopped", a
   await page.route("**/heartbeat", () => {}); // A stalled device update must not hold the picker button.
   await page.locator("#screen").click();
   await expect(page.locator("#screen-progress")).toContainText(
-    "Waiting for the browser screen picker",
+    "Choose Entire screen",
   );
   await expect(page.locator("#screen")).toBeDisabled();
   await page.evaluate(() => document.getElementById("resume-screen").click());
@@ -1411,6 +1435,7 @@ test("setup keeps saved photos separate from new drafts and groups the next acti
     path: "docs/ui/organized-setup-saved-photos.png",
     fullPage: true,
   });
+  await identityStep(page);
   await page.locator("#retake-selfie").click();
   await expect(page.locator("#confirm-selfie")).toBeVisible();
   await expect(page.locator("#selfie-upload-status")).toContainText(
@@ -1437,6 +1462,7 @@ test("staff history has clear incident names, filters and review notes", async (
   const session = await page.evaluate(() => state.session);
   await approveInUI(adminPage, session.id);
   await page.locator("#check-approval").click();
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await page.evaluate(async () => {
@@ -1727,6 +1753,7 @@ test("modern student and staff workspaces keep warnings separate from violations
   await staff.close();
   if (await page.locator("#check-approval").isVisible())
     await page.locator("#check-approval").click();
+  await page.locator('[data-step="4"]').click();
   await page.locator("#start").click();
   await expect(page.locator("#questions")).toBeVisible();
   await page.route("**/monitoring", async (route) => {

@@ -1151,11 +1151,12 @@ async function openSession(session) {
     new Option("Choose sample details…", ""),
     new Option(`${demoProfile.name} · ${demoReference}`, "sample"),
   );
-  $("enrollment-name").value = "";
-  $("enrollment-reference").value = "";
-  state.enrollmentEdited = true;
-  $("enrollment-result").textContent =
-    "Enter any name and student number or email, then select Confirm & next.";
+  $("enrollment-name").value = session.submitted_details?.name || "";
+  $("enrollment-reference").value = session.submitted_details?.reference || "";
+  state.enrollmentEdited = !session.enrollment_confirmed;
+  $("enrollment-result").textContent = session.enrollment_confirmed
+    ? "Your details were saved as entered."
+    : "Enter any name and student number or email, then select Confirm & next.";
   $("id-saved-preview").hidden = !session.identity_evidence?.id;
   if (session.identity_evidence?.id)
     $("id-saved-preview").src =
